@@ -1,0 +1,76 @@
+react를 왜?
+ 1. 사용자 경험
+ 2. 재사용 컴포넌트
+ 3. 데이터-화면 일치
+
+ <!-- 구 버전 코드 -->
+    <script>
+      //tag 생성 함수
+      const e = React.createElement;
+
+      //컴포넌트 React.Component를 상속
+      class LikeButton extends React.Component {
+        constructor(props) {
+          super(props);
+          //바뀔 수 있는 상태
+          this.state = {
+            liked: false,
+          };
+        }
+
+        //어떻게 표시할 것 인지
+        render() {
+          return e(
+            "button",
+            {
+              onClick: () => {
+                console.log("clickded");
+                this.setState({ liked: true });
+              },
+              type: "submit",
+            },
+            this.state.liked === true ? "Liked" : "Like"
+          ); // <button>Like</button>
+        }
+      }
+    </script>
+
+    <script type="text/babel">
+      //react 컴포넌트 선언한 것을 화면에 반영해줌
+      ReactDOM.render(e(LikeButton), document.querySelector(".root"));
+    </script>
+
+    <!-- 신 버전 코드 -->
+    <script type="text/babel">
+      class LikeButton extends React.Component {
+        constructor(props) {
+          super(props);
+          this.state = {
+            liked: false,
+          };
+        }
+
+        //어떻게 화면에 표시해 줄건지
+        //아래의 태그를 만들겠다
+        //JSX = JS + XML
+        //자바스크립트를 문법을 쓰려면 {}로 감싸줌
+        render() {
+          return (
+            <button
+              type="submit"
+              onClick={() => {
+                this.setState({ liked: true });
+                console.log("clicked");
+              }}
+            >
+              {this.state.liked === true ? "Liked" : "Like"}
+            </button>
+          );
+        }
+      }
+    </script>
+
+    <script type="text/babel">
+      //react 컴포넌트 선언한 것을 화면에 반영해줌
+      ReactDOM.render(<LikeButton />, document.querySelector(".root"));
+    </script>

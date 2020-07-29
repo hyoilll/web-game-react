@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script
+      crossorigin
+      src="https://unpkg.com/react@16/umd/react.development.js"
+    ></script>
+    <script
+      crossorigin
+      src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"
+    ></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <title>React</title>
+  </head>
+  <body>
+    <!-- 컴포넌트를 랜더링해줄 태크 -->
+    <div id="root"></div>
+    <!-- GuGuDan -->
+    <script type="text/babel">
+      class GuGuDan extends React.Component {
+        constructor(props) {
+          super(props);
+          this.state = {
+            first: Math.ceil(Math.random() * 9),
+            second: Math.ceil(Math.random() * 9),
+            result: "",
+            value: "",
+            answer: "",
+          };
+        }
+
+        onSubmit = (e) => {
+          e.preventDefault();
+          const num1 = this.state.first;
+          const num2 = this.state.second;
+          const result = num1 * num2;
+
+          const answer = Number(this.state.value);
+          if (result === answer) {
+            this.setState({
+              answer: answer,
+              result: "정답",
+              value: "",
+              first: Math.ceil(Math.random() * 9),
+              second: Math.ceil(Math.random() * 9),
+            });
+          } else {
+            this.setState({
+              answer: answer,
+              result: "틀림",
+              value: "",
+            });
+          }
+
+          //this.input == html.input
+          //DOM 직접 접근
+          this.input.focus();
+        };
+
+        onChange = (e) => {
+          this.setState({ value: e.target.value });
+        };
+
+        //DOM에 직접 접근할 때
+        //ref = {this.onInputFocus}
+        input;
+
+        onInputFocus = (c) => {
+          this.input = c;
+        };
+
+        //DOM을 반영함
+        //this.setState()가 실행되면 render()도 같이 실행됨
+        render() {
+          return (
+            <React.Fragment>
+              <div>
+                {this.state.first} x {this.state.second} = ?
+              </div>
+              <form onSubmit={this.onSubmit}>
+                <input
+                  ref={this.onInputFocus}
+                  type="number"
+                  value={this.state.value}
+                  onChange={this.onChange}
+                ></input>
+                <button type="submit">enter</button>
+              </form>
+              <div>
+                {this.state.answer} {this.state.result}
+              </div>
+            </React.Fragment>
+          );
+        }
+      }
+    </script>
+    <!-- LikeHateButton -->
+    <script type="text/babel">
+      class LikeHateButton extends React.Component {
+        state = {
+          LikeCnt: 0,
+        };
+
+        // Like
+        // this.setState()에서 안에 객체 vs 함수
+        // LikeCnt처럼 이전 값을 참조할 때는 함수로 작성해줄 것
+        // 스레드 처럼 비동기 뮤텍스 관련 문제 때문에 값을 제대로 반영못함
+        onClickLike = () => {
+          this.setState((prevState) => {
+            return {
+              LikeCnt: prevState.LikeCnt + 1,
+            };
+          });
+        };
+
+        // Hate
+        onClickHate = () => {
+          this.setState((prevState) => {
+            const cnt = prevState.LikeCnt - 1;
+            if (cnt >= 0) {
+              return { LikeCnt: prevState.LikeCnt - 1 };
+            } else {
+              return;
+            }
+          });
+        };
+
+        render() {
+          return (
+            <React.Fragment>
+              <button type="submit" onClick={this.onClickLike}>
+                Like
+              </button>
+              <button type="submit" onClick={this.onClickHate}>
+                Hate
+              </button>
+              <div>현재 Like Count : {this.state.LikeCnt}</div>
+            </React.Fragment>
+          );
+        }
+      }
+    </script>
+    <script type="text/babel">
+      //위에서 만든 컴포넌트를 화면에 붙여주겠다
+      ReactDOM.render(
+        <React.Fragment>
+          <GuGuDan />
+          <LikeHateButton />
+        </React.Fragment>,
+        document.querySelector("#root")
+      );
+    </script>
+  </body>
+</html>
