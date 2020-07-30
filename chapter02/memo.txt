@@ -1,0 +1,24 @@
+hooks vs class
+
+ state
+  hooks (구조 분해 할당)
+   const [num, setNum] = React.useState(1);
+
+  class
+   this.state = {
+       num:1,
+   }
+
+ ref
+  hooks
+   const inputRef = React.useRef(초기값);
+   inputRef.current.foucs();
+
+  class
+   input;
+   onRef = (c) => {this.input = c;}
+   this.input.focus();
+
+hooks의 단점
+ class는 render함수만 재실행됨
+ setState()가 실해되면 함수 컴포넌트 전체가 재실행 되므로 좀 느릴 수 있음

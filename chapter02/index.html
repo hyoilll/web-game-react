@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>구구단</title>
+    <script
+      crossorigin
+      src="https://unpkg.com/react@16/umd/react.development.js"
+    ></script>
+    <script
+      crossorigin
+      src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"
+    ></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+  </head>
+  <body>
+    <div class="root"></div>
+    <script type="text/babel">
+      //함수 컴포넌트
+      const GuGuDan = () => {
+        const [first, setFirst] = React.useState(Math.ceil(Math.random() * 9));
+        const [second, setSecond] = React.useState(
+          Math.ceil(Math.random() * 9)
+        );
+        const [result, setResult] = React.useState("");
+        const [value, setValue] = React.useState("");
+        const [anwser, setAnwser] = React.useState("");
+        //DOM 직접 접근
+        const inputRef = React.useRef(null);
+
+        //render는 setState마다 호출되는데 hooks가 한번에 모아서 처리해주기에 딱 1번 랜더링 됨
+        const onSubmit = (e) => {
+          e.preventDefault();
+          const mulResult = first * second;
+          const useAnwser = Number(value);
+
+          if (mulResult === useAnwser) {
+            setResult("정답");
+            setFirst(Math.ceil(Math.random() * 9));
+            setSecond(Math.ceil(Math.random() * 9));
+          } else {
+            setResult("틀림");
+          }
+          inputRef.current.focus();
+          setValue("");
+          setAnwser(String(useAnwser));
+        };
+
+        const onChange = (e) => {
+          setValue(e.target.value);
+        };
+
+        return (
+          <React.Fragment>
+            <div>
+              {first} x {second} = ?
+            </div>
+            <form onSubmit={onSubmit}>
+              <input
+                ref={inputRef} //DOM 직접 접근
+                type="number"
+                value={value}
+                onChange={onChange}
+                placeholder="anwser"
+              ></input>
+              <button type="submit">enter</button>
+            </form>
+            <div>
+              {anwser} {result}
+            </div>
+          </React.Fragment>
+        );
+      };
+
+      const LikeButton = () => {
+        const [likeCnt, setLikeCnt] = React.useState(0);
+
+        //과거 카운트니까 함수로 setState()해줌
+        const onClickLike = () => {
+          setLikeCnt((prevLikeCnt) => {
+            return prevLikeCnt + 1;
+          });
+        };
+
+        const onClickHate = () => {
+          setLikeCnt((prevLikeCnt) => {
+            const cnt = prevLikeCnt - 1;
+            if (cnt >= 0) {
+              return cnt;
+            } else {
+              return 0;
+            }
+          });
+        };
+
+        return (
+          <React.Fragment>
+            <button onClick={onClickLike}>Like</button>
+            <button onClick={onClickHate}>Hate</button>
+            <div>현재 Like Count : {likeCnt}</div>
+          </React.Fragment>
+        );
+      };
+    </script>
+    <script type="text/babel">
+      ReactDOM.render(
+        <React.Fragment>
+          <GuGuDan />
+          <LikeButton />
+        </React.Fragment>,
+        document.querySelector(".root")
+      );
+    </script>
+  </body>
+</html>
