@@ -1,7 +1,6 @@
 # web-game-react
 
-<!--
- ---React, babel, webpack, react-hot-loader, webpack-dev-server 설정---
+---React, babel, webpack, react-hot-loader, webpack-dev-server 설정---
 
     <script
       crossorigin
@@ -49,4 +48,3 @@ ReactDom.render(<Hot/>, document.querySelector(".root")); 변경
 webpack.config.js =>
 module\options\plugins:["react-hot-loader/babel"]; 추가
 output\publicPath:'/dist/', 추가
--->
