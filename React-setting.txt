@@ -10,6 +10,9 @@
     ></script>
     <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
 
+-크롬 브라우저 react 확장프로그램
+확장프로그램 -> react developer tools
+
 -리엑트, 바벨 설치 과정-
 리액트 개발에 필요한 패키지를 넣어줄 파일 생성
  npm init
