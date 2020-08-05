@@ -91,7 +91,7 @@ const NumberBaseball = () => {
 
 export default NumberBaseball;
 
-// import React, { Component } from "react";
+// import React, { PureComponent } from "react";
 // //const { useState, useRef } = React;
 
 // import Try from "./Try";
@@ -109,7 +109,7 @@ export default NumberBaseball;
 //   return arr;
 // }
 
-// class NumberBaseball extends Component {
+// class NumberBaseball extends PureComponent {
 //   state = {
 //     result: "",
 //     value: "",
@@ -144,7 +144,9 @@ export default NumberBaseball;
 
 //       if (this.state.tries.length >= 9) {
 //         this.setState({
-//           result: `10번 넘게 틀려스 실패! 답은 ${answer.join(",")}였습니다.`,
+//           result: `10번 넘게 틀려스 실패! 답은 ${this.state.answer.join(
+//             ""
+//           )}였습니다.`,
 //         });
 //         alert("게임을 다시 시작합니다");
 //         this.setState({

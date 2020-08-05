@@ -40,7 +40,8 @@ import를 사용하면 node에서 error가 발생함 근데 어떻게 사용하�
 
 react에서 반복적인 작업할 때 배열의 map함수를 이용해서 구현
 
-map() 메서드는 배열 내의 모든 요소 각각에 대하여 주어진 함수를 호출한 결과를 모아 새로운 배열을 반환합니다.
+map() 메서드는 배열 내의 모든 요소 각각에 대하여 주어진 함수를 호출한 결과를
+모아 새로운 배열을 반환합니다.
 
 ex) const array1 = [1, 4, 9, 16];
 
@@ -140,6 +141,7 @@ but => 요소가 추가만 되는 배열인 경우 i를 키로 해도 되긴 함
 
 --------------------------------------------------------------
 
+불변성 
 react는 array.push는 안됨
 
 arr.push()를 하면 기존의 배열에 추가해주는 개념이기에 push하기 전과 후의 arr은 똑같은 놈
@@ -155,3 +157,93 @@ arr2 = [...arr1, 2]; //arr2 = [1,2]
    그래서 바로 화면에 추가적으로 표현할 수 있는것
 
 * state, props 가 바뀌면 render가 다시 실행됨
+
+//직접 state를 체크해줘서 이 상태일때만 랜더링해라 라고 설정해줄 수 가 있음
+shouldComponentUpdate(nextProps, nextState, nextContext) {
+    console.log("update");
+    //현재의 cnt랑 미래의 cnt가 다르면 render해라
+    if (this.state.cnt !== nextState.cnt) {
+      return true; //랜더링해라
+    } else {
+      return false; //하지마라
+    }
+  }
+
+좀 더 간단한 방법 => Component 대신에 PureComponent로 해주면 위의 Update함수를 대신 해줌
+ but PureComponent도 위의 불변성의 성질에 의해 랜더를 못해줄 경우가 생김
+ onClick = () => {
+   const arr = this.state.arr; //참조에 의해서 같음
+   arr.push(1);
+   this.setState({
+     arr: arr; //고로 같은 놈을 다시 넣어줌 결과는 같은 놈 render못함
+   })
+ }
+ 참조관계가 그대로 이어지기에 랜더를 못해줌
+ 
+ 해결 : arr:arr => arr:[...this.state.arr, 1],
+
+ class에는 Component -> PureComponent
+
+ import {memo} from 'react';
+ hooks에는 const ComponentName = memo(() => {}); //memo를 붙여줌
+
+ ----------------------------------------------------------
+
+import {createRef} from 'react';
+
+ input;
+ class inputRef=(c) => {this.input = c;}
+ ref={this.inputRef}
+ this.input.focus();
+
+ =>
+
+ inputRef = createRef();
+ ref={this.inputRef}
+ this.inputRef.current.focus();
+
+ ----------------------------------------------------
+ 
+ 자식이 물려받은 props를 바꾸고자 할 때는 직접 바꾸면 안됨
+ 바꾸고자 할떄는 state로 바꿔서 state값을 바꿈
+ 자식이 부모의 props까지 영향을 줌
+
+ -----Hooks
+
+ const Try = memo((tryInfo) => {
+   const [result, setResult] = React.useState(tryInfo.result);
+   const onClick = () => {
+     setResult('1');
+   }
+   return (
+     <li>
+      <div>{tryInfo.try}</div>
+      <div onClick={onClick}>{tryInfo.result}</div>
+     </li>
+   )
+ })
+
+ -----class
+
+ state={
+   result:this.props.result,
+   try:this.props.try,
+ }
+
+ 생성자, ref함수, setState함수 등 함수를 쓰고자 하면 더 세부적인
+ 동작을 정의할 수 있기에 편한 것도 있음.
+
+----------------------------------------------
+
+Context
+
+NumberBaseball -> Try 
+부모 NumberBaseball의 props를 Try가 받아서 사용했음
+만약에 구조가
+NumberBaseball -> Try -> C -> D -> E -> F일 경우
+NumberBaseball에서 F로 props를 전달하려고 하면 사이에 있는
+Try -> C -> D -> E 를 거쳐야함. 이것이 뭘 의미하냐면
+props를 건드리기에 의도에도 없는 render가 실행될 수 있다는 의미임
+그럼 성능도 안좋아짐, 그래서 나온게 conText임.
+NumberBaseball에서 바로 F로 props를 넘길 수 있음.
+이걸 응용한게 redux...
