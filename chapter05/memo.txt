@@ -1,0 +1,2 @@
+class로 만들 떄 처음에는 Component로 시작해라
+그 후에 render이 너무 과하면 PureComponent로 하던지 함수로 하던지

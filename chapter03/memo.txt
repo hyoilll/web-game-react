@@ -158,6 +158,10 @@ arr2 = [...arr1, 2]; //arr2 = [1,2]
 
 * state, props 가 바뀌면 render가 다시 실행됨
 
+-------------------------------render 최적화----------------------------------
+Hooks는 setState, props가 실행되면 함수컴포넌트 자체가 재실행
+Class는         ''     가 실행되면 render함수만 재실행
+
 //직접 state를 체크해줘서 이 상태일때만 랜더링해라 라고 설정해줄 수 가 있음
 shouldComponentUpdate(nextProps, nextState, nextContext) {
     console.log("update");
